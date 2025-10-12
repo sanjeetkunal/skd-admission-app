@@ -49,7 +49,7 @@ export default function Footer() {
             <img
               src={logoLightUrl}
               alt="Shri Khushal Das University"
-              className="h-24 w-auto md:h-50"
+              className="h-22 w-auto md:h-22"
               loading="lazy"
               decoding="async"
             />

@@ -9,11 +9,11 @@ export default function Header() {
       <div className="mx-auto w-full px-5 sm:px-8 lg:px-12 xl:px-16">
         <div className="flex h-16 items-center justify-between md:h-20">
           {/* Left: big logo + word */}
-          <a href="#" className="flex items-center gap-3 mt-1">
+          <a href="#" className="flex items-center gap-3 mt-3">
             <img
               src={logoLight}
               alt="SKDU"
-              className="h-30 w-auto md:h-30"
+              className="h-22 w-auto md:h-22"
               loading="lazy"
               decoding="async"
             />
