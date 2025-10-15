@@ -150,7 +150,7 @@ export default function SectionsGrid() {
         </motion.div>
 
         {/* Apply Now pill */}
-        <motion.div
+        {/* <motion.div
           variants={vCta}
           initial="hidden"
           whileInView="show"
@@ -170,7 +170,7 @@ export default function SectionsGrid() {
           >
             Apply Now
           </motion.a>
-        </motion.div>
+        </motion.div> */}
       </div>
     </section>
   );

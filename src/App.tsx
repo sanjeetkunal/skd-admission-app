@@ -9,6 +9,7 @@ import Recognitions from "@/sections/Recognitions"
 import Scholarship from "@/sections/Scholarship"
 import HowToApply from "@/sections/HowToApply"
 import FAQ from "@/sections/FAQ"
+import ApplyNowBar from "./components/ApplyNowBar"
 
 export default function App() {
   return (
@@ -26,6 +27,8 @@ export default function App() {
         <FAQ />
       </main>
       <Footer />
+
+     <ApplyNowBar phone="+919876543210" target="#apply" offset={80} showAfter={120} />
     </div>
   )
 }

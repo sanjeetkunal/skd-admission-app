@@ -10,7 +10,7 @@ function PillButton({ children }: { children: React.ReactNode }) {
       href="#apply"
       onClick={(e) => {
         e.preventDefault();
-        scrollToApply(80);
+       // scrollToApply(80);
       }}
       className="inline-block rounded-full bg-white px-6 py-2 text-[14px] font-semibold text-[#ff5a2a]
                  [filter:drop-shadow(0_10px_22px_rgba(0,0,0,0.28))]"
@@ -225,14 +225,14 @@ export default function HowToApply() {
             </motion.div>
           </div>
 
-          <motion.div
+          {/* <motion.div
             variants={vCTA}
             className="mt-5 flex justify-center"
           >
             <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
               <PillButton>Apply Now</PillButton>
             </motion.div>
-          </motion.div>
+          </motion.div> */}
         </motion.div>
 
         {/* Career & Placement card */}
@@ -314,7 +314,7 @@ export default function HowToApply() {
           </div>
         </motion.div>
 
-        <motion.div
+        {/* <motion.div
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.35 }}
@@ -324,7 +324,7 @@ export default function HowToApply() {
           <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
             <PillButton>Apply Now</PillButton>
           </motion.div>
-        </motion.div>
+        </motion.div> */}
       </div>
     </section>
   );
