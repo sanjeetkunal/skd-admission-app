@@ -207,7 +207,7 @@ export default function HeroApply() {
           hidden md:block
           md:bottom-[-12px] md:left-[54%] md:w-[420px] md:-translate-x-[18%]
           lg:bottom-[-18px] lg:left-[52%] lg:w-[520px] lg:-translate-x-[16%]
-          xl:bottom-[-24px] xl:left-[40%] xl:w-[660px] xl:-translate-x-[12%]
+          xl:bottom-[-24px] xl:left-[30%] xl:w-[660px] xl:-translate-x-[12%]
           max-[900px]:[@media(orientation:landscape)]:hidden
         "
         loading="lazy"
