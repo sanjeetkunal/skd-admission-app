@@ -55,7 +55,7 @@ export default function ApplyNowBar({
 return (
   <>
     {/* APPLY: vertical right-edge tab at center */}
-    <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex flex-col items-end pr-2">
+    <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex flex-col items-end pr-2 ">
       <motion.button
         initial={{ x: 60, opacity: 0 }}
         animate={{ x: applyVisible ? 0 : 60, opacity: applyVisible ? 1 : 0 }}
@@ -77,7 +77,7 @@ return (
           aria-hidden="true"
           className="pointer-events-none absolute right-[-6px] top-0 h-full w-[2px] bg-gray-300"
         />
-        <span className="flex items-center justify-center gap-2 px-2 font-semibold tracking-widest text-[12px] uppercase">
+        <span className="flex items-center justify-center gap-2 px-2 font-semibold tracking-widest text-[12px] uppercase cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-4 w-4 rotate-90"
