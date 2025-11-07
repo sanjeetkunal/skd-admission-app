@@ -1,197 +1,307 @@
 // src/sections/HeroApply.tsx
-import { useEffect, useMemo } from "react";
-import {
-  motion,
-  useReducedMotion,
-  useAnimationControls,
-  type Variants,
-} from "framer-motion";
-import ApplyForm from "@/forms/ApplyForm";
-import studentUrl from "@/assets/banner_girl.png";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import heroBg from "@/assets/hero-bg.png";
 
-/* ===== Animations ===== */
-const easeCurve = [0.22, 1, 0.36, 1] as const;
-
-const staggerParent: Variants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
-};
-const fadeUp = (dy = 16, d = 0): Variants => ({
-  hidden: { opacity: 0, y: dy },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeCurve, delay: d } },
-});
-const fadeRight = (dx = 24, d = 0): Variants => ({
-  hidden: { opacity: 0, x: dx },
-  show: { opacity: 1, x: 0, transition: { duration: 0.6, ease: easeCurve, delay: d } },
-});
-const popIn = (s = 0.96, d = 0): Variants => ({
-  hidden: { opacity: 0, scale: s },
-  show: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: easeCurve, delay: d } },
-});
+const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function HeroApply() {
-  const reduce = useReducedMotion();
-  const imgCtrl = useAnimationControls();
-
-  useEffect(() => {
-    imgCtrl
-      .start({ opacity: 1, y: 0, transition: { duration: 0.7, ease: easeCurve, delay: 0.25 } })
-      .then(() => {
-        if (!reduce) {
-          imgCtrl.start({
-            y: [0, -8, 0],
-            transition: { duration: 6, ease: "easeInOut", repeat: Infinity },
-          });
-        }
-      });
-  }, [imgCtrl, reduce]);
-
-  const ringsVariant = useMemo<Variants>(
-    () => (reduce ? { hidden: {}, show: {} } : popIn(0.9, 0.06)),
-    [reduce]
-  );
-
   return (
-    <motion.section
-      initial="hidden"
-      animate="show"
-      className="relative w-full overflow-hidden"
-      style={{
-        background:
-          "radial-gradient(1100px 520px at 85% -20%, rgba(20,90,200,.28), transparent 60%), radial-gradient(900px 420px at 30% -20%, rgba(20,60,160,.22), transparent 60%), #0b2340",
-      }}
+    <section
+      id="hero-apply"
+      style={{ backgroundImage: `url(${heroBg})` }}
+      className="
+        relative w-full overflow-hidden text-white
+        bg-no-repeat bg-cover bg-center
+      "
     >
-      {/* Rings */}
-      <motion.div
-        variants={ringsVariant}
-        className="pointer-events-none absolute -top-40 right-[-120px] h-[420px] w-[420px] rounded-full border-[36px] border-[#0e325a]/50 max-md:opacity-40 md:h-[520px] md:w-[520px] md:border-[44px]"
-        aria-hidden
-      />
-      <motion.div
-        variants={ringsVariant}
-        className="pointer-events-none absolute bottom-[-160px] left-[-60px] h-[420px] w-[680px] rounded-[340px] border-[36px] border-[#173a6a]/50 max-md:opacity-40 md:h-[520px] md:w-[800px] md:border-[44px]"
-        aria-hidden
-      />
+      {/* Contrast overlay */}
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.58),rgba(0,0,0,.38))]" />
 
       {/* Container */}
-      <div className="mx-auto w-full max-w-[120rem] px-[max(16px,env(safe-area-inset-left))] pb-10 pt-20 sm:px-[max(24px,env(safe-area-inset-left))] md:pb-16 md:pt-24 lg:px-[max(48px,env(safe-area-inset-left))] xl:px-[max(64px,env(safe-area-inset-left))]">
-
-        {/* 3 columns: Left | Center (img) | Right (form) */}
+      <div className="relative mx-auto w-full
+    px-5 sm:px-8 lg:px-12 xl:px-16
+    py-10 lg:py-16 mt-[100px]
+    max-md:px-4 max-md:py-8 max-md:mt-[60px]">
+        {/* ⬇️ Left | Right (fixed form width) like before */}
         <div
           className="
-            grid items-start justify-items-stretch
-            gap-6 md:gap-8
-            grid-cols-1
-            /* md+: tuned track widths */
-            md:[grid-template-columns:minmax(320px,680px)_minmax(320px,640px)_minmax(420px,560px)]
-            lg:[grid-template-columns:minmax(340px,720px)_minmax(360px,660px)_minmax(420px,560px)]
-            xl:[grid-template-columns:minmax(360px,740px)_minmax(380px,680px)_minmax(440px,560px)]
-            mt-[clamp(40px,8vw,100px)]
+            grid items-start gap-8 lg:gap-10
+      lg:grid-cols-[minmax(0,1.05fr)_minmax(0,520px)]
+      xl:grid-cols-[minmax(0,1.05fr)_minmax(0,560px)]
+      max-md:grid-cols-1 max-md:gap-8
           "
         >
-          {/* Left: Copy */}
-          <motion.div variants={staggerParent} className="relative z-[1] text-white w-full max-w-[740px]">
-            <motion.h1
-              variants={fadeUp(14, 0)}
-              className="mb-2 font-extrabold tracking-tight leading-[1.05]
-                         text-[clamp(28px,6.2vw,64px)]"
-            >
-              SKDU NEST <span className="text-amber-400">2025</span>
-            </motion.h1>
+          {/* LEFT COPY */}
+          <LeftCopy />
 
-            <motion.p
-              variants={fadeUp(12, 0.05)}
-              className="text-white/80 text-[clamp(12px,1.7vw,18px)]"
-            >
-              Shri Khushal Das University National Entrance Scholarship Test
-            </motion.p>
-
-            <motion.div
-              variants={fadeUp(16, 0.1)}
-              className="mt-[clamp(12px,2.2vw,20px)] space-y-[clamp(6px,1.4vw,10px)] leading-snug text-[clamp(14px,2.1vw,20px)]"
-            >
-              <p className="text-white/80">A Test to Transform Your Future</p>
-              <p>
-                Earn the <span className="font-bold text-amber-400">Scholarship</span> You{" "}
-                <span className="font-extrabold">Deserve!</span>
-              </p>
-            </motion.div>
-
-            {/* Scholarship block */}
-            <motion.div variants={fadeUp(18, 0.16)} className="mt-[clamp(16px,3vw,28px)]">
-              <p className="italic text-white/90 text-[clamp(16px,2.2vw,22px)]">Earn</p>
-              <div className="mt-1 flex flex-wrap items-end gap-x-2 leading-tight">
-                <span className="italic font-extrabold tracking-wide text-[clamp(28px,6vw,40px)]">
-                  SCHOLARSHIPS
-                </span>
-                <span className="mb-2 text-[clamp(10px,1.5vw,12px)] italic">UPTO</span>
-              </div>
-
-              <div className="mt-1 flex flex-wrap items-end gap-[clamp(6px,1.2vw,12px)]">
-                <span className="leading-none font-extrabold text-amber-400 text-[clamp(40px,8vw,72px)]">
-                  50%
-                </span>
-                <span className="mb-[6px] text-[clamp(16px,2.5vw,22px)] font-semibold italic">VIA</span>
-                <span className="mb-[4px] text-[clamp(20px,3.2vw,30px)] font-extrabold italic text-amber-400">
-                  SKDU
-                </span>
-                <span className="mb-[4px] text-[clamp(20px,3.2vw,30px)] font-extrabold italic">
-                  NEST
-                </span>
-              </div>
-            </motion.div>
-
-            <motion.a
-              variants={fadeUp(20, 0.22)}
-              whileHover={{ y: -2, boxShadow: "0 12px 28px rgba(0,0,0,.28)" }}
-              whileTap={{ scale: 0.98 }}
-              href="#apply"
-              className="mt-[clamp(14px,3vw,24px)] inline-block rounded-2xl bg-white
-                         px-[clamp(12px,2.4vw,20px)] py-[clamp(10px,2vw,14px)]
-                         shadow-[0_10px_26px_rgba(0,0,0,.25)]"
-            >
-              <span className="font-extrabold tracking-wide text-[#0b2340] text-[clamp(14px,2.2vw,22px)]">
-                ADMISSIONS OPEN <span className="text-amber-400">2025</span>
-              </span>
-            </motion.a>
-          </motion.div>
-
-          {/* Center: Illustration — bigger and bottom-aligned */}
-          <motion.div
-            className="relative hidden overflow md:flex items-end justify-center self-end"
-            initial={{ opacity: 0, y: 20 }}
-            animate={imgCtrl}
-          >
-            <img
-              src={studentUrl}
-              alt="Student"
-              className="pointer-events-none select-none block w-full max-w-[660px] h-auto absolute bottom-[-70px]"
-              loading="lazy"
-              decoding="async"
-            />
-          </motion.div>
-
-          {/* Right: Apply Form — narrower & hard-right */}
-          <motion.div
-            variants={fadeRight(28, 0.18)}
-            className="relative z-[2] justify-self-end w-full max-w-[560px]"
-          >
-            <motion.div
-              variants={popIn(0.98, 0.28)}
-              id="apply"
-              className="ml-auto rounded-2xl bg-white/95 backdrop-blur
-                         shadow-[0_10px_30px_rgba(0,0,0,.18)]
-                         w-full max-w-[clamp(400px,32vw,560px)]
-                         p-[clamp(14px,2.4vw,22px)]"
-            >
-              <div className="mb-[clamp(10px,2vw,16px)] text-center font-bold text-[#0b2340] text-[clamp(16px,2.2vw,20px)]">
-                Apply Now
-              </div>
-              <ApplyForm />
-            </motion.div>
-          </motion.div>
+          {/* RIGHT FORM (fixed side, aligned to right) */}
+          <div className="justify-self-stretch lg:justify-self-end w-full max-w-[560px]">
+            <FormCard />
+          </div>
         </div>
       </div>
-    </motion.section>
+    </section>
+  );
+}
+
+/* ----------------- Left block ----------------- */
+function LeftCopy() {
+  return (
+    <div className="max-w-[820px]">
+      <motion.p
+        initial={{ y: 10, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.45, ease }}
+        className="text-[20px] sm:text-[22px] md:text-[24px] font-medium text-white/90"
+      >
+        अब सिर्फ डिग्री नहीं, सरकारी नौकरी की तैयारी भी!
+      </motion.p>
+
+      <div className="mt-4 h-[3px] w-[78%] max-w-[560px] rounded-full bg-[#f4b23e]" />
+
+      <motion.h1
+        initial={{ y: 16, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.55, ease, delay: 0.04 }}
+        className="mt-6 leading-tight font-extrabold"
+      >
+        <span className="block text-[34px] sm:text-[38px] md:text-[44px]">
+          डिग्री + <span className="whitespace-nowrap">SSC, BANKING, RAILWAY</span>
+        </span>
+        <span className="mt-2 block text-[18px] sm:text-[20px] md:text-[22px] font-semibold text-white/90">
+          की तैयारी एक साथ,
+        </span>
+      </motion.h1>
+
+      <motion.div
+        initial={{ y: 14, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease, delay: 0.08 }}
+        className="mt-6"
+      >
+        <button
+          type="button"
+          className="inline-flex items-center justify-center rounded-lg bg-[#e4404f] px-6 py-3 text-[18px] font-extrabold tracking-wide text-white shadow-[0_8px_22px_rgba(0,0,0,.25)] hover:brightness-110 focus:outline-none"
+        >
+          बिना Extra Fees!
+        </button>
+      </motion.div>
+
+      <motion.div
+        initial={{ y: 12, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.45, ease, delay: 0.12 }}
+        className="mt-10"
+      >
+        <div className="text-[28px] sm:text-[32px] md:text-[36px] font-extrabold">
+          2025 के लिए प्रवेश प्रारंभ
+        </div>
+        <div className="mt-2 text-[24px] sm:text-[26px] md:text-[28px] font-extrabold">
+          <span className="text-[#f4b23e]">SKDU, Hanumangarh</span>
+        </div>
+        <div className="mt-4 h-[3px] w-[55%] max-w-[460px] rounded-full bg-[#f4b23e]" />
+      </motion.div>
+    </div>
+  );
+}
+
+/* ----------------- Right tabbed card ----------------- */
+function FormCard() {
+  const [tab, setTab] = useState<"register" | "login">("register");
+
+  return (
+    <motion.div
+      initial={{ x: 24, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ duration: 0.55, ease, delay: 0.04 }}
+      className="relative w-full"
+    >
+      <div className="rounded-xl bg-white text-slate-800 shadow-[0_18px_60px_rgba(0,0,0,.35)]">
+        {/* Header */}
+        <div className="px-6 pt-6 pb-4">
+          <h3 className="text-[22px] sm:text-[24px] font-extrabold text-slate-800">
+            Admissions Open 2025
+          </h3>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex">
+          <TabButton active={tab === "register"} onClick={() => setTab("register")} label="Register Now" left />
+          <TabButton active={tab === "login"} onClick={() => setTab("login")} label="Login Now" />
+        </div>
+
+        {/* Body */}
+        <div className="px-6 py-6 min-h-[360px]">
+          <AnimatePresence mode="wait">
+            {tab === "register" ? <RegisterTab /> : <LoginTab />}
+          </AnimatePresence>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ---- Tabs ---- */
+function RegisterTab() {
+  return (
+    <motion.div
+      key="register"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 12 }}
+      transition={{ duration: 0.28, ease }}
+      className="space-y-4"
+    >
+      <input className="w-full rounded-md border border-slate-300 px-4 py-3 text-[14px] outline-none focus:ring-2 focus:ring-[#f6b63f]" placeholder="Your Full Name*" />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="flex">
+          <div className="flex items-center gap-2 rounded-l-md border border-slate-300 bg-slate-50 px-3 text-[14px]">
+            <span role="img" aria-label="flag">🇮🇳</span>
+            <span className="text-slate-700">+91</span>
+            <svg viewBox="0 0 24 24" className="h-4 w-4 text-slate-500" fill="none" stroke="currentColor" strokeWidth={2}><path d="M6 9l6 6 6-6" /></svg>
+          </div>
+          <input className="w-full rounded-r-md border border-l-0 border-slate-300 px-4 py-3 text-[14px] outline-none focus:ring-2 focus:ring-[#f6b63f]" placeholder="Mobile Number*" />
+        </div>
+        <input className="w-full rounded-md border border-slate-300 px-4 py-3 text-[14px] outline-none focus:ring-2 focus:ring-[#f6b63f]" placeholder="Email Address*" />
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Select placeholder="Select State*" />
+        <Select placeholder="Select District*" />
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Select placeholder="Select Program*" />
+        <Select placeholder="Select Course*" />
+      </div>
+
+      <Select placeholder="Select Session*" />
+
+      <div className="flex items-center gap-3 pt-1">
+        <input id="notify" type="checkbox" className="h-4 w-4 rounded border-slate-300 text-[#0b3c86] focus:ring-[#0b3c86]" />
+        <label htmlFor="notify" className="text-[13px] text-slate-700">
+          I agree to receive notifications <span className="text-[#f6b63f]">*</span>
+        </label>
+      </div>
+
+      <div className="pt-1">
+        <button className="ml-auto block rounded-md bg-[#f3bf1a] px-6 py-3 text-[15px] font-extrabold text-slate-900 shadow-[0_8px_24px_rgba(0,0,0,.18)] hover:brightness-105">
+          Sign Up
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
+function LoginTab() {
+  return (
+    <motion.div
+      key="login"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 12 }}
+      transition={{ duration: 0.28, ease }}
+      className="space-y-5"
+    >
+      <p className="text-[14px] text-slate-700">
+        Proceed with your Email or Mobile number without Country code
+        <br /> <span className="text-slate-500">eg. 74xxxxxxxx</span>
+      </p>
+
+      <div className="grid gap-6 sm:grid-cols-[140px_1fr] sm:items-center">
+        <div className="mx-auto sm:mx-0">
+          <LoginIllustration />
+        </div>
+
+        <div className="space-y-4">
+          <input className="w-full rounded-md border border-slate-300 px-4 py-3 text-[14px] outline-none focus:ring-2 focus:ring-[#f6b63f]" placeholder="Your Email Id or Mobile number*" />
+          <button className="w-full rounded-md bg-[#f3bf1a] px-6 py-3 text-[15px] font-extrabold text-slate-900 shadow-[0_8px_24px_rgba(0,0,0,.18)] hover:brightness-105">
+            Proceed
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+/* Tab button */
+function TabButton({
+  active,
+  onClick,
+  label,
+  left = false,
+}: {
+  active: boolean;
+  onClick: () => void;
+  label: string;
+  left?: boolean;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      aria-pressed={active}
+      className={[
+        "w-1/2 px-6 py-3 text-center text-[15px] font-semibold transition-colors",
+        active
+          ? "bg-white text-slate-800 border-t-2 border-[#f6b63f]"
+          : "bg-slate-200/60 text-slate-700",
+        left ? "rounded-tl-xl" : "rounded-tr-xl",
+      ].join(" ")}
+    >
+      {label}
+    </button>
+  );
+}
+
+/* Select helper */
+function Select({ placeholder }: { placeholder: string }) {
+  return (
+    <div className="relative">
+      <select
+        defaultValue=""
+        className="w-full appearance-none rounded-md border border-slate-300 bg-white px-4 py-3 text-[14px] text-slate-800 outline-none focus:ring-2 focus:ring-[#f6b63f]"
+      >
+        <option value="" disabled>{placeholder}</option>
+        <option>Option 1</option>
+        <option>Option 2</option>
+      </select>
+      <svg
+        viewBox="0 0 24 24"
+        className="pointer-events-none absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500"
+        fill="none" stroke="currentColor" strokeWidth={2}
+      >
+        <path d="M6 9l6 6 6-6" />
+      </svg>
+    </div>
+  );
+}
+
+/* Small inline SVG */
+function LoginIllustration() {
+  return (
+    <svg viewBox="0 0 180 160" className="h-[110px] w-auto">
+      <defs>
+        <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#FFD36E" />
+          <stop offset="1" stopColor="#FFA63B" />
+        </linearGradient>
+      </defs>
+      <rect x="8" y="96" rx="10" ry="10" width="70" height="22" fill="#0B4B8F" />
+      <rect x="8" y="124" rx="10" ry="10" width="90" height="22" fill="#0B4B8F" />
+      <rect x="60" y="98" width="14" height="18" rx="3" fill="#E53E3E" />
+      <rect x="70" y="126" width="14" height="18" rx="3" fill="#E53E3E" />
+      <circle cx="40" cy="60" r="28" fill="url(#lg)" />
+      <rect x="20" y="52" width="40" height="36" rx="10" fill="#fff" stroke="#111" strokeWidth="2" />
+      <circle cx="38" cy="44" r="24" fill="#F8C39A" stroke="#111" strokeWidth="2" />
+      <path d="M26 46q12 8 24 0" stroke="#333" strokeWidth="2" fill="none" />
+      <circle cx="32" cy="42" r="2.6" fill="#111" />
+      <circle cx="44" cy="42" r="2.6" fill="#111" />
+      <rect x="88" y="50" width="30" height="36" rx="6" fill="#fff" stroke="#111" strokeWidth="2" />
+      <rect x="112" y="54" width="40" height="28" rx="10" fill="#fff" stroke="#111" strokeWidth="2" />
+      <circle cx="118" cy="68" r="3" fill="#111" />
+      <circle cx="130" cy="68" r="3" fill="#111" />
+      <circle cx="142" cy="68" r="3" fill="#111" />
+    </svg>
   );
 }

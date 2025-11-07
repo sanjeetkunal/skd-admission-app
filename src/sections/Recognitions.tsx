@@ -217,7 +217,7 @@ export default function Recognitions() {
   const vLogo = useMemo<Variants>(() => (reduce ? { hidden: {}, show: {} } : logoItem), [reduce]);
 
   return (
-    <section className="bg-white py-10 md:py-14">
+    <section className="bg-white py-10 md:py-14 mb-[200px]">
       <div className="container-x">
         {/* Heading */}
         <motion.h3
