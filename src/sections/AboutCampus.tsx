@@ -62,22 +62,6 @@ export default function AboutCampus() {
           className="mx-auto mt-3 h-px w-full max-w-[980px] bg-slate-300 origin-center"
         />
 
-        {/* Image */}
-        <motion.div
-          variants={vImg}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.35 }}
-          className="mx-auto mt-8 max-w-[1024px]"
-        >
-          <img
-            src={collegebg}
-            alt="SKDU Campus"
-            className="w-full object-contain"
-            loading="lazy"
-            decoding="async"
-          />
-        </motion.div>
 
         {/* Navy band (RELATIVE) */}
         <motion.div
@@ -87,12 +71,9 @@ export default function AboutCampus() {
           viewport={{ once: true, amount: 0.35 }}
           className="
             relative mx-auto mt-0
-            bg-[#0a1c33] px-5 py-6 md:px-6 md:py-6
-            text-center text-[12px] leading-6 text-slate-200
-            shadow-[0_12px_32px_rgba(0,0,0,0.22)]
-            rounded-lg
-          "
-        >
+            px-5 py-6 md:px-6 md:py-6
+            text-center text-[12px] leading-6 text-slate-700
+          ">
           <p>
             Welcome to Shri Khushal Das University (SKDU) – a beacon of knowledge and excellence
             located in the heart of Hanumangarh, Rajasthan. Established in 2018 by the Shri Guru
