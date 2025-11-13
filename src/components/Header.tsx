@@ -13,7 +13,7 @@ export default function Header() {
             <img
               src={logoLight}
               alt="SKDU"
-              className="h-30 w-auto md:h-30"
+              className="h-30 w-auto md:h-30 p-5"
               loading="lazy"
               decoding="async"
             />
