@@ -1,5 +1,5 @@
 // src/utils/scrollToApply.ts
-export function scrollToApply(offset = 80) {
+export function scrollToApply(offset = 80, target: string) {
   const el = document.getElementById("apply");
   if (!el) return;
 

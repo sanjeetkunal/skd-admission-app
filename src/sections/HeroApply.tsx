@@ -6,6 +6,7 @@ import {
 } from "framer-motion";
 import ApplyForm from "@/forms/ApplyForm";
 import studentUrl from "@/assets/banner_girl.png";
+import ApplyNowBar from "@/components/ui/ApplyNowBar"; // 👈 NEW IMPORT
 
 /* ===== Animations ===== */
 const easeCurve = [0.22, 1, 0.36, 1] as const;
@@ -70,11 +71,6 @@ export default function HeroApply() {
           xl:px-[max(64px,env(safe-area-inset-left))]
         "
       >
-        {/* Layout:
-            - mobile: 1 col (Text → Form)
-            - md:     2 cols top row (Text + Image), next row Form full-width
-            - lg+:    3 cols; image absolute bottom-pinned; form right column
-        */}
         <div
           className="
             grid
@@ -95,7 +91,7 @@ export default function HeroApply() {
             <motion.h1
               variants={fadeUp(14, 0)}
               className="
-                mt-6 md:mt-0            /* mobile-only top gap for the heading */
+                mt-6 md:mt-0
                 mb-2
                 font-extrabold tracking-tight leading-[1.05]
                 text-[clamp(28px,6.2vw,64px)]
@@ -158,7 +154,7 @@ export default function HeroApply() {
             </motion.a>
           </motion.div>
 
-          {/* Center image — visible only on tablet (hidden on mobile) */}
+          {/* Center image — tablet only */}
           <motion.div
             className="
               relative hidden md:flex lg:hidden
@@ -194,14 +190,14 @@ export default function HeroApply() {
             />
           </motion.div>
 
-          {/* FORM — md: full width with top gap; lg+: right column */}
+          {/* FORM */}
           <motion.div
             variants={fadeRight(28, 0.18)}
             className="
               relative z-[2]
               order-3
               col-span-1 md:col-span-2 lg:col-span-1
-              md:mt-8 lg:mt-0       /* tablet gap between button & form */
+              md:mt-8 lg:mt-0
               md:mb-8 lg:mb-0
               w-full
               justify-self-stretch md:justify-self-stretch lg:justify-self-end
@@ -220,9 +216,12 @@ export default function HeroApply() {
           </motion.div>
         </div>
 
-        {/* Mobile spacing */}
-        <div className="block md:hidden h-6" />
+        {/* Mobile spacing so content not hidden behind floating bar */}
+        <div className="block md:hidden h-24" />
       </div>
+
+      {/* ✅ Same ApplyNowBar we used earlier */}
+      <ApplyNowBar phone={"+918875132111"} />
     </motion.section>
   );
 }
