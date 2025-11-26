@@ -1,4 +1,5 @@
-// src/forms/ApplyForm.tsx
+import { RegisterRequest, useRegister } from "@/services/nestapplication";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 type FormValues = {
@@ -19,13 +20,37 @@ const PROGRAMS = ["UG Programs", "PG Programs", "Diploma", "Certificate"];
 const COURSES = ["BBA", "BCA", "B.Sc.", "MBA", "MCA", "M.Sc."];
 
 export default function ApplyForm() {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormValues>({
     defaultValues: { countryCode: "+91" }
   });
 
-  const onSubmit = (data: FormValues) => {
-    console.log("Apply:", data);
-    // TODO: send to backend
+  const { register: doRegister, loading } = useRegister();
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  const onSubmit = async (data: FormValues) => {
+    setSuccessMessage(null);
+    console.log("data entered: ", data);
+
+    try {
+      const payload: RegisterRequest = { ...data };
+      await doRegister(payload);
+
+      setSuccessMessage("Application submitted successfully.");
+      reset({
+      countryCode: "+91",
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err: any) {
+
+      // try to pull a meaningful message from the server error
+      const serverMessage =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        err?.message ||
+        "Failed to submit application. Please try again.";
+
+      console.error("Register error:", err);
+    }
   };
 
   const baseField =
